@@ -1,0 +1,37 @@
+@startuml arch_proyecto_alpha
+
+class User {
+    - int id
+    - string nombre
+    - string password
+
+    + User(int id, string nombre, string password)
+    + \~User()
+    + int getId()
+    + string getNombre()
+    + string getHashPassword()
+}
+
+class UserManager {
+    - int sizeUsers
+    - int currentPosition
+    - User[] users
+
+    + UserManager()
+    + \~UserManager()
+    + bool newUser(string nombre, string password)
+    + User getUser(int id)
+    - void growUsers()
+}
+
+class TheMole {
+    - int boardSize
+    - int[][] board
+    - ManageUsers  players
+    - map<int, puntuation> userPuntuation
+
+    + TheMole(int boardSize)
+    + void setBoardSize(int boardSize)
+}
+
+@enduml

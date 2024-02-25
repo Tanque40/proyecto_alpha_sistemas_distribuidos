@@ -1,3 +1,8 @@
+bin/**
+bin-int/**
+
+**/.DS_Store
+
 # Prerequisites
 *.d
 
@@ -27,6 +32,6 @@
 *.lib
 
 # Executables
-*.exe
+AlphaProject/*.exe
 *.out
 *.app
