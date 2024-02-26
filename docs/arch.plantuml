@@ -24,14 +24,20 @@ class UserManager {
     - void growUsers()
 }
 
-class TheMole {
+class WhackAMole {
     - int boardSize
-    - int[][] board
-    - ManageUsers  players
-    - map<int, puntuation> userPuntuation
+    - vector<vector<int>> board
+    - map<int, int> userPuntuation
 
-    + TheMole(int boardSize)
+    + WhackAMole(int boardSize)
     + void setBoardSize(int boardSize)
+    + int getBoardSideSize()
+    + string getBoard()
+    + bool setNewUserPuntuation(int userId)
+    + int getNewMolePosition()
+    + bool setUserPuntuation(int userId)
 }
+
+User "Is use by" --> UserManager 
 
 @enduml

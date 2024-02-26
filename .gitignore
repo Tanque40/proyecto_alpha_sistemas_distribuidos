@@ -1,7 +1,8 @@
 bin/**
 bin-int/**
-
+.vscode 
 **/.DS_Store
+Makefile
 
 # Prerequisites
 *.d
