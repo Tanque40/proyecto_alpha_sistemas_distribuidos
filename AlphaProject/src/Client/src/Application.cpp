@@ -1,4 +1,4 @@
-#include "lib/renderer/EntryPoint.h"
+#include "EntryPoint.h"
 
 int main() {
     Renderer::Render();

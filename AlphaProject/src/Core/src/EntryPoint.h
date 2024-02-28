@@ -1,13 +1,15 @@
+#ifdef __APPLE__
 #include <GL/glew.h>
+#endif
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <iostream>
 
+#include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "imgui.h"
 
 namespace Renderer {
 
@@ -166,7 +168,6 @@ int Render() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        ImGui::ShowDemoWindow();  // Show demo window! :)
 
         // draw our first triangle
         glUseProgram(program);
