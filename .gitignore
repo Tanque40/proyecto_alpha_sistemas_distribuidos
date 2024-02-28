@@ -3,6 +3,7 @@ bin-int/**
 .vscode 
 **/.DS_Store
 Makefile
+imgui.ini
 
 # Prerequisites
 *.d
