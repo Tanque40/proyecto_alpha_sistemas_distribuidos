@@ -28,6 +28,12 @@ objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 files {
     "%{prj.location}/**.h",
     "%{prj.location}/**.cpp",
+    "AlphaProject/vendor/ImGUI/*.h",
+    "AlphaProject/vendor/ImGUI/*.cpp",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_glfw.h",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_glfw.cpp",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_opengl3.h",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_opengl3.cpp",
 }
 
 includedirs {
@@ -36,6 +42,14 @@ includedirs {
     "%{includeDir.ImGUI}",
     "%{includeDir.SHA256}",
     "AlphaProject/src"
+}
+
+links {
+    "GLEW",
+    "GLFW",
+    "Cocoa.framework",
+    "OpenGL.framework",
+    "IOKit.framework"
 }
 
 project "Client"
@@ -51,6 +65,12 @@ objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 files {
     "%{prj.location}/**.h",
     "%{prj.location}/**.cpp",
+    "AlphaProject/vendor/ImGUI/*.h",
+    "AlphaProject/vendor/ImGUI/*.cpp",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_glfw.h",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_glfw.cpp",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_opengl3.h",
+    "AlphaProject/vendor/ImGUI/backends/imgui_impl_opengl3.cpp",
 }
 
 includedirs {
