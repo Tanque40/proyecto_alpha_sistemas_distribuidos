@@ -15,8 +15,8 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "AlphaProject/vendor/GLFW"
 
-project "AlphaProject"
-location "AlphaProject"
+project "Server"
+location "AlphaProject/src/server"
 kind "ConsoleApp"
 language "C++"
 cppdialect "C++latest"
@@ -26,8 +26,8 @@ targetdir("bin/" .. outputdir .. "/%{prj.name}")
 objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 
 files {
-    "%{prj.location}/src/**.h",
-    "%{prj.location}/src/**.cpp",
+    "%{prj.location}/**.h",
+    "%{prj.location}/**.cpp",
 }
 
 includedirs {
@@ -35,6 +35,30 @@ includedirs {
     "%{includeDir.GLEW}",
     "%{includeDir.ImGUI}",
     "%{includeDir.SHA256}",
+    "AlphaProject/src"
+}
+
+project "Client"
+location "AlphaProject/src/client"
+kind "ConsoleApp"
+language "C++"
+cppdialect "C++latest"
+staticruntime "on"
+
+targetdir("bin/" .. outputdir .. "/%{prj.name}")
+objdir("bin-int/" .. outputdir .. "/%{prj.name}")
+
+files {
+    "%{prj.location}/**.h",
+    "%{prj.location}/**.cpp",
+}
+
+includedirs {
+    "%{includeDir.GLFW}",
+    "%{includeDir.GLEW}",
+    "%{includeDir.ImGUI}",
+    "%{includeDir.SHA256}",
+    "AlphaProject/src"
 }
 
 links {

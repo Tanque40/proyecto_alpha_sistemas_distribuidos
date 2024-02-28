@@ -38,6 +38,44 @@ class WhackAMole {
     + bool setUserPuntuation(int userId)
 }
 
+class Referee{
+    + {static} bool checkValidWhack(vector<vector<int>> board, int smash)
+    + {static} int checkIfWin(map<int, int> usersPuntuation)
+}
+
+enum UpdateBoardType{
+    DOWN
+    UP
+    WHACKED
+}
+
+class Player {
+    - vector<vector<int>> board
+
+    + Player(string name, string password)
+    + bool setSmash(int positonOfSmash)
+    + bool verifySmash(int positionOfSmash)
+    + void updateBoard(UpdateBoardType updateType, int position)
+}
+
+class Game {
+    - UserManager users
+    - WhackAMole whackAMole
+
+    + Game()
+    + void newPlayer()
+    + void setNewMole()
+    + int defineWinner()
+}
+
 User "Is use by" --> UserManager 
+
+Referee "Use" <-- UserManager
+Player "Extends" <.. User
+Player "Use" <-- UpdateBoardType
+Game "Use" <-- UserManager
+Game "Use" <-- Referee
+Game "Use" <-- Player
+Game "Use" <-- WhackAMole
 
 @enduml

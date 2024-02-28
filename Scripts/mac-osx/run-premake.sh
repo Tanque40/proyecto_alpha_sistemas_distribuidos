@@ -1,0 +1,1 @@
+./vendor/premake-core/bin/release/premake5 --file=premake-macosx.lua gmake2
