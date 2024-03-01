@@ -45,7 +45,7 @@ void Application::OnEvent(Event& e) {
 }
 
 void Application::Run() {
-    while (isRunning) {
+    while (this->isRunning) {
         float time = (float)glfwGetTime();
         TimeStep timestep = time - lastFrameTime;
         lastFrameTime = time;

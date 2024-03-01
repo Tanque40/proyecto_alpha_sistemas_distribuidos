@@ -5,7 +5,7 @@ using namespace Core;
 
 class ClientApplication : public Application {
    public:
-    ClientApplication() {
+    ClientApplication() : Application("Client Alpha Project") {
         PushLayer(new ApplicationLayer());
     }
 };

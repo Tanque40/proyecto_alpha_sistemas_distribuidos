@@ -6,12 +6,12 @@ namespace Core {
 
 class WindowInput : public Input {
    protected:
-    virtual bool IsKeyPressed(int keycode);
+    virtual bool IsKeyPressedImpl(int keycode);
 
-    virtual bool IsMouseButtonPressed(int button);
-    virtual std::pair<float, float> GetMousePosition();
-    virtual float GetMouseX();
-    virtual float GetMouseY();
+    virtual bool IsMouseButtonPressedImpl(int button);
+    virtual std::pair<float, float> GetMousePositionImpl();
+    virtual float GetMouseXImpl();
+    virtual float GetMouseYImpl();
 };
 
 }  // namespace Core

@@ -14,6 +14,7 @@ includeDir["GLFW"] = "vendor/GLFW/include"
 includeDir["GLEW"] = "vendor/GLEW/include"
 includeDir["ImGUI"] = "vendor/ImGUI"
 includeDir["SHA256"] = "vendor/SHA256/include"
+includeDir["glm"] = "vendor/glm"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 

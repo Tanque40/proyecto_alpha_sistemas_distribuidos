@@ -15,7 +15,8 @@ includedirs {
 	"../../%{includeDir.GLFW}",
 	"../../%{includeDir.GLEW}",
 	"../../%{includeDir.ImGUI}",
-	"../../%{includeDir.stb_image}"
+	"../../%{includeDir.stb_image}",
+	"../../%{includeDir.glm}",
 }
 
 files {
@@ -29,6 +30,8 @@ files {
 	"../../vendor/ImGUI/backends/imgui_impl_glfw.cpp",
 	"../../vendor/ImGUI/backends/imgui_impl_opengl3.h",
 	"../../vendor/ImGUI/backends/imgui_impl_opengl3.cpp",
+	"../../vendor/glm/glm/**.hpp",
+	"../../vendor/glm/glm/**.inl",
 }
 
 defines {

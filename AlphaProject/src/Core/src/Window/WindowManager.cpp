@@ -64,6 +64,13 @@ void WindowManager::Init(const WindowProps& props) {
 
     if (!GLFWInitialized) {
         int succes = glfwInit();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
         if (!succes) {
             std::cout << "Could not initialize GLFW! Program should Stop" << std::endl;
             glfwTerminate();
@@ -84,12 +91,12 @@ void WindowManager::Init(const WindowProps& props) {
 #endif  // APPLE
 
     std::cout << "OPENGL INFO:" << std::endl;
-    std::cout << "\tVENDOR: " << glewGetString(GL_VENDOR) << std::endl;
-    std::cout << "\tRENDERER: " << glewGetString(GL_RENDER) << std::endl;
-    std::cout << "\tVERSION: " << glewGetString(GL_VERSION) << std::endl;
-
+    /*     std::cout << "\tVENDOR: " << glewGetString(GL_VENDOR) << std::endl;
+        std::cout << "\tRENDERER: " << glewGetString(GL_RENDER) << std::endl;
+        std::cout << "\tVERSION: " << glewGetString(GL_VERSION) << std::endl;
+     */
     glfwSetWindowUserPointer(window, &windowData);
-    SetVSync(true);
+    this->SetVSync(true);
 
     // Set GLFW callbacks
     glfwSetWindowSizeCallback(window, [](GLFWwindow* gWindow, int width, int height) {

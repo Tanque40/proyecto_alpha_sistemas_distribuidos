@@ -19,11 +19,17 @@ includedirs {
 	"../../%{includeDir.GLFW}",
 	"../../%{includeDir.GLEW}",
 	"../../%{includeDir.ImGUI}",
+	"../../%{includeDir.glm}",
 	"../../%{includeDir.stb_image}"
 }
 
 links {
 	"Core-AlphaProject",
+	"GLFW",
+	"GLEw",
+	"Cocoa.framework",
+	"OpenGL.framework",
+	"IOKit.framework",
 }
 
 filter "configurations:Debug"

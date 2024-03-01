@@ -1,9 +1,17 @@
-#include <iostream>
+#include "EntryPoint.h"
+#include "ApplicationLayer.h"
 
-#include "lib/Core/EntryPoint.h"
+using namespace Core;
+
+class ClientApplication : public Application {
+   public:
+    ClientApplication() {
+        PushLayer(new ApplicationLayer());
+    }
+};
 
 int main() {
-    std::cout << "Hi from server" << std::endl;
-    Renderer::Render();
+    std::unique_ptr<ClientApplication> app = std::make_unique<ClientApplication>();
+    app->Run();
     return 0;
 }

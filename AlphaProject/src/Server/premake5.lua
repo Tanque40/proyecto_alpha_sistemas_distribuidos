@@ -24,6 +24,11 @@ includedirs {
 
 links {
 	"Core-AlphaProject",
+	"GLFW",
+	"GLEw",
+	"Cocoa.framework",
+	"OpenGL.framework",
+	"IOKit.framework",
 }
 
 filter "configurations:Debug"
