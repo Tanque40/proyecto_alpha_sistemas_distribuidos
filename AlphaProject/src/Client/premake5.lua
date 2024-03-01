@@ -8,21 +8,22 @@ targetdir("../../../bin/" .. outputdir .. "/%{prj.name}")
 objdir("../../../bin-int/" .. outputdir .. "/%{prj.name}")
 
 files {
-    "src/**.h",
-    "src/**.cpp",
-    "../Assets/**.*",
+	"src/**.h",
+	"src/**.cpp",
+	"../Assets/**.*",
 }
 
 includedirs {
-    "../Core/src",
-    "../../%{includeDir.GLFW}",
-    "../../%{includeDir.GLEW}",
-    "../../%{includeDir.ImGUI}",
-    "../../%{includeDir.stb_image}"
+	"src/",
+	"../Core/src",
+	"../../%{includeDir.GLFW}",
+	"../../%{includeDir.GLEW}",
+	"../../%{includeDir.ImGUI}",
+	"../../%{includeDir.stb_image}"
 }
 
 links {
-    "Core-AlphaProject",
+	"Core-AlphaProject",
 }
 
 filter "configurations:Debug"
