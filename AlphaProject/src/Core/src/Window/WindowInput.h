@@ -1,15 +1,17 @@
+#pragma once
+
 #include "Core/Input.h"
 
 namespace Core {
 
 class WindowInput : public Input {
    protected:
-    virtual bool IsKeyPressedImplementation(int keycode) override;
+    virtual bool IsKeyPressed(int keycode);
 
-    virtual bool IsMouseButtonPressedImplementation(int button) override;
-    virtual std::pair<float, float> GetMousePositionImplementation() override;
-    virtual float GetMouseXImpementation() override;
-    virtual float GetMouseYImplementation() override;
+    virtual bool IsMouseButtonPressed(int button);
+    virtual std::pair<float, float> GetMousePosition();
+    virtual float GetMouseX();
+    virtual float GetMouseY();
 };
 
 }  // namespace Core

@@ -19,7 +19,7 @@ class MouseMovedEvent : public Event {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(MouseMoved)
+    EVENT_CLASS_TYPE(Core::EventType::MouseMoved)
     EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 };
 
@@ -40,7 +40,7 @@ class MouseScrolledEvent : public Event {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(MouseScrolled)
+    EVENT_CLASS_TYPE(Core::EventType::MouseScrolled)
     EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 };
 
@@ -67,7 +67,7 @@ class MouseButtonPressedEvent : public MouseButtonEvent {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(MouseButtonPressed)
+    EVENT_CLASS_TYPE(Core::EventType::MouseButtonPressed)
 };
 
 class MouseButtonReleasedEvent : public MouseButtonEvent {
@@ -81,7 +81,7 @@ class MouseButtonReleasedEvent : public MouseButtonEvent {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(MouseButtonReleased)
+    EVENT_CLASS_TYPE(Core::EventType::MouseButtonReleased)
 };
 
 }  // namespace Core

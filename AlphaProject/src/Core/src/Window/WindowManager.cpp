@@ -37,7 +37,7 @@ WindowManager::~WindowManager() {
 
 void WindowManager::OnUpdate() {
     glfwPollEvents();
-    glfwSwapBuffers(m_Window);
+    glfwSwapBuffers(window);
 }
 
 void WindowManager::SetVSync(bool enabled) {
@@ -54,7 +54,7 @@ bool WindowManager::IsVSync() const {
 }
 
 void WindowManager::Shutdown() {
-    glfwDestroyWindow(m_Window);
+    glfwDestroyWindow(window);
 }
 
 void WindowManager::Init(const WindowProps& props) {
@@ -69,7 +69,7 @@ void WindowManager::Init(const WindowProps& props) {
             glfwTerminate();
         }
         glfwSetErrorCallback(GLFWErrorCallback);
-        GLFWInitialized = true
+        GLFWInitialized = true;
     }
 
     window = glfwCreateWindow((int)props.Width, (int)props.Height, windowData.Title.c_str(), nullptr, nullptr);
@@ -78,15 +78,15 @@ void WindowManager::Init(const WindowProps& props) {
 #ifdef __APPLE__
     GLenum err = glewInit();
     if (GLEW_OK != err) {
-        std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+        std::cout << "Error: " << glewGetErrorString(err) << std::endl;
         glfwTerminate();
     }
 #endif  // APPLE
 
     std::cout << "OPENGL INFO:" << std::endl;
-    std::cout << "\tVENDOR: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "\tRENDERER: " << glGetString(GL_RENDER) << std::endl;
-    std::cout << "\tVERSION: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "\tVENDOR: " << glewGetString(GL_VENDOR) << std::endl;
+    std::cout << "\tRENDERER: " << glewGetString(GL_RENDER) << std::endl;
+    std::cout << "\tVERSION: " << glewGetString(GL_VERSION) << std::endl;
 
     glfwSetWindowUserPointer(window, &windowData);
     SetVSync(true);

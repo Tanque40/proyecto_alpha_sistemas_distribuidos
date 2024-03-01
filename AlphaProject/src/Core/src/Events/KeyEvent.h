@@ -30,7 +30,7 @@ class KeyPressedEvent : public KeyEvent {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(KeyPressed)
+    EVENT_CLASS_TYPE(Core::EventType::KeyPressed)
 };
 
 class KeyReleasedEvent : public KeyEvent {
@@ -44,7 +44,7 @@ class KeyReleasedEvent : public KeyEvent {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(KeyReleased)
+    EVENT_CLASS_TYPE(Core::EventType::KeyReleased)
 };
 
 class KeyTypedEvent : public KeyEvent {
@@ -58,7 +58,7 @@ class KeyTypedEvent : public KeyEvent {
         return ss.str();
     }
 
-    EVENT_CLASS_TYPE(KeyTyped)
+    EVENT_CLASS_TYPE(Core::EventType::KeyTyped)
 };
 
 }  // namespace Core

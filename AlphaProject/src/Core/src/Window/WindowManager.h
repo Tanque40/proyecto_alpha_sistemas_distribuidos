@@ -31,13 +31,11 @@ class WindowManager : public Window {
     void SetVSync(bool enabled) override;
     bool IsVSync() const override;
 
-    inline virtual void* GetNativeWindow() const { return window; }
+    inline virtual void* GetNativeWindow() const override { return window; }
 
    private:
     virtual void Init(const WindowProps& props);
     virtual void Shutdown();
 };
-
-}
 
 }  // namespace Core

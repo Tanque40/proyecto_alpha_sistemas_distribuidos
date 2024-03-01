@@ -3,6 +3,6 @@
 
 namespace Core {
 
-Layer::Layer(const std::string& name = "Layer") : debugName(name) {}
+Layer::Layer(const std::string& name) : debugName(name) {}
 
 }  // namespace Core

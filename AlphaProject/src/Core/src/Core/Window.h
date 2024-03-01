@@ -1,3 +1,5 @@
+#pragma once
+
 #include "appch.h"
 
 #include "Core/Core.h"
@@ -15,7 +17,7 @@ struct WindowProps {
         uint32_t width = 1280,
         uint32_t height = 720)
         : Title(title), Width(width), Height(height) {}
-}
+};
 
 // Interface representing a window based sytem
 class Window {
@@ -37,6 +39,6 @@ class Window {
     virtual void* GetNativeWindow() const = 0;
 
     static Window* Create(const WindowProps& props = WindowProps());
-}
+};
 
 }  // namespace Core

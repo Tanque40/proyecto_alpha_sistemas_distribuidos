@@ -7,13 +7,12 @@ ApplicationLayer::ApplicationLayer() {
 }
 
 void ApplicationLayer::OnAttach() {
-    EnableDebugging();
 }
 
 void ApplicationLayer::OnDetach() {
 }
 
-void ApplicationLayer::OnUpdate(Core::Timestep timeStep) {
+void ApplicationLayer::OnUpdate(Core::TimeStep timeStep) {
 }
 
 void ApplicationLayer::OnImGuiRender() {

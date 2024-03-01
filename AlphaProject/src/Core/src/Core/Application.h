@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Core.h"
 
 #include "Window.h"
@@ -5,9 +7,9 @@
 #include "../Events/Event.h"
 #include "../Events/ApplicationEvent.h"
 
-#include "Timestep.h"
+#include "TimeStep.h"
 
-#include "../ImGUI/ImGuiLayer.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace Core {
 
@@ -19,7 +21,7 @@ class Application {
     LayerStack layerStack;
     float lastFrameTime = 0.0f;
 
-    Application* applicationInstance;
+    static Application* applicationInstance;
 
    public:
     Application(const std::string& name = "Proyecto Alpha", uint32_t width = 1280, uint32_t height = 720);
@@ -27,7 +29,7 @@ class Application {
 
     void Run();
 
-    void onEvent(Event& event);
+    void OnEvent(Event& event);
 
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
@@ -35,6 +37,9 @@ class Application {
     inline Window& GetWindow() { return *window; }
 
     inline static Application& Get() { return *applicationInstance; }
-}
+
+   private:
+    bool OnWindowClose(WindowCloseEvent& e);
+};
 
 }  // namespace Core
