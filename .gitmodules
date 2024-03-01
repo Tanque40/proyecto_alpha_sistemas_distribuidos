@@ -13,3 +13,6 @@
 [submodule "AlphaProject/vendor/ImGUI"]
 	path = AlphaProject/vendor/ImGUI
 	url = https://github.com/ocornut/imgui.git
+[submodule "AlphaProject/vendor/glm"]
+	path = AlphaProject/vendor/glm
+	url = https://github.com/g-truc/glm.git
