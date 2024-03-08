@@ -1,11 +1,37 @@
 #include "ApplicationLayer.h"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <stb_image.h>
 
 using namespace Core;
 using namespace Core::Utils;
 
-ApplicationLayer::ApplicationLayer() : m_CameraController(16.0f / 9.0f) {
+ApplicationLayer::ApplicationLayer() : m_CameraController(16.0f / 9.0f, false) {
+}
+
+static void SetUnifornMat4(uint32_t shader, const char* name, const glm::mat4& matrix) {
+    int location = glGetUniformLocation(shader, name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+static GLuint LoadTexture(const std::string& path) {
+    int w, h, bits;
+
+    stbi_set_flip_vertically_on_load(1);
+    auto* pixels = stbi_load(path.c_str(), &w, &h, &bits, STBI_rgb);
+    GLuint textureId;
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    stbi_image_free(pixels);
+
+    return textureId;
 }
 
 void ApplicationLayer::OnAttach() {
@@ -13,53 +39,63 @@ void ApplicationLayer::OnAttach() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    m_Shader = Shader::FromGLSLTextFiles(
+    shader = std::unique_ptr<Shader>(Shader::FromGLSLTextFiles(
         "AlphaProject/src/Assets/shaders/Client.vertex.glsl",
-        "AlphaProject/src/Assets/shaders/Client.frag.glsl");
+        "AlphaProject/src/Assets/shaders/Client.frag.glsl"));
 
-    glGenVertexArrays(1, &m_QuadVA);
-    glBindVertexArray(m_QuadVA);
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f};
+    glUseProgram(shader->GetRendererID());
+    auto location = glGetUniformLocation(shader->GetRendererID(), "u_Textures");
+    int samplers[16];
+    for (size_t i = 0; i < 16; i++) {
+        samplers[i] = i;
+    }
+    glUniform1iv(location, 16, samplers);
 
-    glGenBuffers(1, &m_QuadVB);
-    glBindBuffer(GL_ARRAY_BUFFER, m_QuadVB);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+    Renderer::Init(shader->GetRendererID());
 
-    uint32_t indices[] = {0, 1, 2, 2, 3, 0};
-    glGenBuffers(1, &m_QuadIB);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_QuadIB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    moleUp = LoadTexture("AlphaProject/src/Assets/sprites/mole_up.png");
+    moleDown = LoadTexture("AlphaProject/src/Assets/sprites/mole_down.png");
+    moleWhacked = LoadTexture("AlphaProject/src/Assets/sprites/mole_whacked.png");
 }
 
 void ApplicationLayer::OnDetach() {
-    glDeleteVertexArrays(1, &m_QuadVA);
-    glDeleteBuffers(1, &m_QuadVB);
-    glDeleteBuffers(1, &m_QuadIB);
+    Renderer::Shutdown();
 }
+
+float elapsedTime = 0.0f;
 
 void ApplicationLayer::OnUpdate(Core::TimeStep timeStep) {
     m_CameraController.OnUpdate(timeStep);
 
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(shader->GetRendererID());
 
-    glUseProgram(m_Shader->GetRendererID());
+    Renderer::ResetStats();
+    Renderer::BeginBatch();
 
-    int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
+    elapsedTime += timeStep.GetSeconds();
+    for (float y = -10.0f; y < 10.0f; y += 0.25f) {
+        for (float x = -10.0f; x < 10.0f; x += 0.25f) {
+            glm::vec4 color = {(x + 10) / 20.0f, 0.2f, (y + 10) / 20.f, 1.0f};
+            if ((int)elapsedTime % 9 < 3) {
+                Renderer::DrawQuad({x, y}, {0.25f, 0.25f}, moleWhacked);
+            } else if ((int)elapsedTime % 9 < 6) {
+                Renderer::DrawQuad({x, y}, {0.25f, 0.25f}, moleDown);
+            } else {
+                Renderer::DrawQuad({x, y}, {0.25f, 0.25f}, moleUp);
+            }
+        }
+    }
 
-    location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Color");
-    glUniform4fv(location, 1, m_SquareColor);
+    Renderer::EndBatch();
 
-    glBindVertexArray(m_QuadVA);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    auto vp = m_CameraController.GetCamera().GetViewProjectionMatrix();
+    SetUnifornMat4(shader->GetRendererID(), "u_ViewProjection", vp);
+    SetUnifornMat4(shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+
+    Renderer::Flush();
 }
 
 void ApplicationLayer::OnImGuiRender() {

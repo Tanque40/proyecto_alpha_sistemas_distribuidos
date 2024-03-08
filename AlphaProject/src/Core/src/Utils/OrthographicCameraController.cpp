@@ -6,25 +6,27 @@
 
 namespace Core::Utils {
 
-OrthographicCameraController::OrthographicCameraController(float _aspectRatio, bool _rotation)
-    : aspectRatio(_aspectRatio), camera(-aspectRatio * zoomLevel, _aspectRatio * zoomLevel, -zoomLevel, zoomLevel), rotation(_rotation) {
+OrthographicCameraController::OrthographicCameraController(float _aspectRatio, bool _move, bool _rotation)
+    : aspectRatio(_aspectRatio), camera(-aspectRatio * zoomLevel, _aspectRatio * zoomLevel, -zoomLevel, zoomLevel), move(_move), rotation(_rotation) {
 }
 
 void OrthographicCameraController::OnUpdate(TimeStep ts) {
-    if (Input::IsKeyPressed(RN_KEY_A)) {
-        cameraPosition.x -= cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-        cameraPosition.y -= sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-    } else if (Input::IsKeyPressed(RN_KEY_D)) {
-        cameraPosition.x += cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-        cameraPosition.y += sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-    }
+    if (move) {
+        if (Input::IsKeyPressed(RN_KEY_A)) {
+            cameraPosition.x -= cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+            cameraPosition.y -= sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+        } else if (Input::IsKeyPressed(RN_KEY_D)) {
+            cameraPosition.x += cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+            cameraPosition.y += sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+        }
 
-    if (Input::IsKeyPressed(RN_KEY_W)) {
-        cameraPosition.x += -sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-        cameraPosition.y += cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-    } else if (Input::IsKeyPressed(RN_KEY_S)) {
-        cameraPosition.x -= -sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
-        cameraPosition.y -= cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+        if (Input::IsKeyPressed(RN_KEY_W)) {
+            cameraPosition.x += -sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+            cameraPosition.y += cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+        } else if (Input::IsKeyPressed(RN_KEY_S)) {
+            cameraPosition.x -= -sin(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+            cameraPosition.y -= cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
+        }
     }
 
     if (rotation) {

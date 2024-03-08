@@ -16,6 +16,7 @@ files {
 includedirs {
 	"src/",
 	"../Core/src",
+	"../Lib/",
 	"../../%{includeDir.GLFW}",
 	"../../%{includeDir.GLEW}",
 	"../../%{includeDir.ImGUI}",

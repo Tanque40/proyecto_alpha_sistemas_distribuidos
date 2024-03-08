@@ -15,13 +15,14 @@ class OrthographicCameraController {
     OrthographicCamera camera;
 
     bool rotation;
+    bool move;
 
     glm::vec3 cameraPosition = {0.0f, 0.0f, 0.0f};
     float cameraRotation = 0.0f;  // In degrees, in the anti-clockwise direction
     float cameraTranslationSpeed = 5.0f, cameraRotationSpeed = 180.0f;
 
    public:
-    OrthographicCameraController(float aspectRatio, bool rotation = false);
+    OrthographicCameraController(float aspectRatio, bool move = true, bool rotation = false);
 
     void OnUpdate(TimeStep ts);
     void OnEvent(Event& e);

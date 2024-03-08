@@ -19,6 +19,7 @@ includedirs {
 	"../../%{includeDir.GLFW}",
 	"../../%{includeDir.GLEW}",
 	"../../%{includeDir.ImGUI}",
+	"../../%{includeDir.glm}",
 	"../../%{includeDir.stb_image}"
 }
 
@@ -29,6 +30,7 @@ links {
 	"Cocoa.framework",
 	"OpenGL.framework",
 	"IOKit.framework",
+	"pthread"
 }
 
 filter "configurations:Debug"
