@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "FrameBuffer.h"
 
 #include <EntryPoint.h>
 #include <array>
@@ -79,7 +80,7 @@ void Renderer::Init(uint32_t _shaderId) {
 
     glGenBuffers(1, &rendererData.QuadIB);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererData.QuadIB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
 
     // ? 1 x 1 white texture
     glGenTextures(1, &rendererData.WhiteTexture);

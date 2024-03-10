@@ -1,4 +1,4 @@
-project "Server-AlphaProject"
+project "Server-GUI-AlphaProject"
 kind "ConsoleApp"
 language "C++"
 cppdialect "C++latest"
@@ -10,18 +10,28 @@ objdir("../../../bin-int/" .. outputdir .. "/%{prj.name}")
 files {
 	"src/**.h",
 	"src/**.cpp",
+	"../Assets/**.*",
 }
-
 
 includedirs {
 	"src/",
-	"../Lib/",
+	"../Core/src",
+	"../../%{includeDir.GLFW}",
+	"../../%{includeDir.GLEW}",
+	"../../%{includeDir.ImGUI}",
+	"../../%{includeDir.glm}",
+	"../../%{includeDir.stb_image}"
 }
 
 links {
+	"Core-AlphaProject",
+	"GLFW",
+	"GLEw",
+	"Cocoa.framework",
+	"OpenGL.framework",
+	"IOKit.framework",
 	"pthread"
 }
-
 
 filter "configurations:Debug"
 runtime "Debug"

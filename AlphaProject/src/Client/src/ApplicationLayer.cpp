@@ -1,13 +1,19 @@
 #include "ApplicationLayer.h"
 
+#include <math.h>
+
+#include "imgui_internal.h"
+
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb_image.h>
 
+#include "Core/Renderer/FrameBuffer.h"
+
 using namespace Core;
 using namespace Core::Utils;
 
-ApplicationLayer::ApplicationLayer() : m_CameraController(16.0f / 9.0f, false) {
+ApplicationLayer::ApplicationLayer() : m_CameraController(16.0f / 9.0f, false), numberOfMoles(9) {
 }
 
 static void SetUnifornMat4(uint32_t shader, const char* name, const glm::mat4& matrix) {
@@ -58,6 +64,8 @@ void ApplicationLayer::OnAttach() {
     moleUp = LoadTexture("AlphaProject/src/Assets/sprites/mole_up.png");
     moleDown = LoadTexture("AlphaProject/src/Assets/sprites/mole_down.png");
     moleWhacked = LoadTexture("AlphaProject/src/Assets/sprites/mole_whacked.png");
+
+    // FrameBuffer::CreateFrameBuffer();
 }
 
 void ApplicationLayer::OnDetach() {
@@ -69,6 +77,9 @@ float elapsedTime = 0.0f;
 void ApplicationLayer::OnUpdate(Core::TimeStep timeStep) {
     m_CameraController.OnUpdate(timeStep);
 
+    // FrameBuffer::Bind();
+
+    glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shader->GetRendererID());
 
@@ -76,48 +87,82 @@ void ApplicationLayer::OnUpdate(Core::TimeStep timeStep) {
     Renderer::BeginBatch();
 
     elapsedTime += timeStep.GetSeconds();
-    for (float y = -10.0f; y < 10.0f; y += 0.25f) {
-        for (float x = -10.0f; x < 10.0f; x += 0.25f) {
-            glm::vec4 color = {(x + 10) / 20.0f, 0.2f, (y + 10) / 20.f, 1.0f};
-            if ((int)elapsedTime % 9 < 3) {
-                Renderer::DrawQuad({x, y}, {0.25f, 0.25f}, moleWhacked);
-            } else if ((int)elapsedTime % 9 < 6) {
-                Renderer::DrawQuad({x, y}, {0.25f, 0.25f}, moleDown);
-            } else {
-                Renderer::DrawQuad({x, y}, {0.25f, 0.25f}, moleUp);
-            }
+
+    float zoom = m_CameraController.GetZoomLevel();
+    float leftSideWindow = -16.0f / 9.0f * zoom;
+    float rightSideWindow = 16.0f / 9.0f * zoom;
+    float squareSizeY = (2.0f * zoom) / sqrt(numberOfMoles);
+    float squareSizeX = (rightSideWindow - leftSideWindow) / sqrt(numberOfMoles);
+    for (float x = leftSideWindow; x < rightSideWindow; x += squareSizeX) {
+        for (float y = -1.0f * zoom; y < 1.0f * zoom; y += squareSizeY) {
+            if ((int)elapsedTime % 9 < 3)
+                Renderer::DrawQuad({x, y}, glm::vec2(squareSizeX, squareSizeY), moleDown);
+            else if ((int)elapsedTime % 9 < 6)
+                Renderer::DrawQuad({x, y}, glm::vec2(squareSizeX, squareSizeY), moleUp);
+            else
+                Renderer::DrawQuad({x, y}, glm::vec2(squareSizeX, squareSizeY), moleWhacked);
         }
     }
 
     Renderer::EndBatch();
-
     auto vp = m_CameraController.GetCamera().GetViewProjectionMatrix();
     SetUnifornMat4(shader->GetRendererID(), "u_ViewProjection", vp);
-    SetUnifornMat4(shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+    SetUnifornMat4(shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.3f)));
 
     Renderer::Flush();
+    glUseProgram(0);
+    // FrameBuffer::UnBind();
 }
 
 void ApplicationLayer::OnImGuiRender() {
-    ImGui::Begin("Controls");
-    if (ImGui::ColorEdit4("Square Base Color", m_SquareBaseColor))
-        m_SquareColor = m_SquareBaseColor;
-    ImGui::ColorEdit4("Square Alternate Color", m_SquareAlternateColor);
+    ImGui::Begin("Settings");
+    {
+        for (size_t i = 1; i <= 8; i++) {
+            int numberOfMolesImGui = i * i;
+            std::string message = "Topos: " + std::to_string(numberOfMolesImGui);
+            ImGui::RadioButton(message.c_str(), &numberOfMoles, numberOfMolesImGui);
+        }
+    }
     ImGui::End();
+
+    /* ImGui::Begin("Game Window");
+    {
+        float windowWidth = ImGui::GetContentRegionAvail().x;
+        float windowHeight = ImGui::GetContentRegionAvail().y;
+        FrameBuffer::Rescale(windowWidth, windowHeight);
+        float aspectRatio = windowWidth / windowHeight;
+        m_CameraController.GetCamera().SetProjection(-aspectRatio * m_CameraController.GetZoomLevel(),
+                                                     aspectRatio * m_CameraController.GetZoomLevel(),
+                                                     -m_CameraController.GetZoomLevel(),
+                                                     m_CameraController.GetZoomLevel());
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+
+        ImGui::Image(
+            (ImTextureID*)FrameBuffer::GetTextureFrameBufferId(),
+            ImGui::GetContentRegionAvail(),
+            ImVec2(0, 1),
+            ImVec2(1, 0));
+    }
+    ImGui::End(); */
 }
 
 void ApplicationLayer::OnEvent(Core::Event& event) {
     m_CameraController.OnEvent(event);
 
     EventDispatcher dispatcher(event);
+    dispatcher.Dispatch<MouseMovedEvent>(
+        [&](MouseMovedEvent& e) {
+            mouseXPosition = e.GetX();
+            mouseYPosition = e.GetY();
+            return false;
+        });
     dispatcher.Dispatch<MouseButtonPressedEvent>(
         [&](MouseButtonPressedEvent& e) {
-            m_SquareColor = m_SquareAlternateColor;
+            std::cout << mouseXPosition << ", " << mouseYPosition << std::endl;
             return false;
         });
     dispatcher.Dispatch<MouseButtonReleasedEvent>(
         [&](MouseButtonReleasedEvent& e) {
-            m_SquareColor = m_SquareBaseColor;
             return false;
         });
 }
