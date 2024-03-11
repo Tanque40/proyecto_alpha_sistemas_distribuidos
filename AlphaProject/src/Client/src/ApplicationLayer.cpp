@@ -1,11 +1,9 @@
 #include "ApplicationLayer.h"
 
-#include <math.h>
-
-#include "imgui_internal.h"
-
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "imgui_internal.h"
+#include <math.h>
 #include <stb_image.h>
 
 #include "Core/Renderer/FrameBuffer.h"
@@ -65,6 +63,7 @@ void ApplicationLayer::OnAttach() {
     moleDown = LoadTexture("AlphaProject/src/Assets/sprites/mole_down.png");
     moleWhacked = LoadTexture("AlphaProject/src/Assets/sprites/mole_whacked.png");
 
+    clientSocket = SocketTCP(SocketType::Client, "127.0.0.1");
     // FrameBuffer::CreateFrameBuffer();
 }
 
@@ -117,10 +116,23 @@ void ApplicationLayer::OnUpdate(Core::TimeStep timeStep) {
 void ApplicationLayer::OnImGuiRender() {
     ImGui::Begin("Settings");
     {
+        ImGui::SeparatorText("Game Controls");
         for (size_t i = 1; i <= 8; i++) {
             int numberOfMolesImGui = i * i;
             std::string message = "Topos: " + std::to_string(numberOfMolesImGui);
             ImGui::RadioButton(message.c_str(), &numberOfMoles, numberOfMolesImGui);
+        }
+
+        ImGui::SeparatorText("ServerConnection");
+        if (ImGui::Button("Send Message")) {
+            std::string response;
+            std::string message = "Hola desde GUI";
+            if (clientSocket.SendMessage(0, &message)) {
+                if (clientSocket.ReciveMessage(0, &response))
+                    std::cout << response.c_str() << std::endl;
+                clientSocket.EndConnection();
+                clientSocket = SocketTCP(SocketType::Client, "127.0.0.1");
+            }
         }
     }
     ImGui::End();

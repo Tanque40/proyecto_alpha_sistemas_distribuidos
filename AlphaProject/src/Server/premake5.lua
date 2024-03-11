@@ -16,9 +16,11 @@ files {
 includedirs {
 	"src/",
 	"../Lib/",
+	"../Core/src",
 }
 
 links {
+	"Core-AlphaProject",
 	"pthread"
 }
 

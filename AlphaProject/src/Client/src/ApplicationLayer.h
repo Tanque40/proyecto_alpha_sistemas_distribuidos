@@ -4,21 +4,25 @@
 #include <EntryPointUtils.h>
 #include <glm/glm.hpp>
 
+#include "Server/SocketTCP.h"
 #include "Core/Renderer/Renderer.h"
 
 class ApplicationLayer : public Core::Layer {
    private:
-    // Variables for engine start
+    // ? Variables for engine start ⚙️
     std::unique_ptr<Core::Utils::Shader> shader;
     Core::Utils::OrthographicCameraController m_CameraController;
 
     GLuint m_QuadVA, m_QuadVB, m_QuadIB;
 
-    // Variables for the game
+    // ? Variables for the game 🎮
     int numberOfMoles;
     GLuint moleUp, moleDown, moleWhacked;
 
     float mouseXPosition, mouseYPosition;
+
+    // ? For Sockets 🖥️
+    SocketTCP clientSocket;
 
    public:
     ApplicationLayer();
