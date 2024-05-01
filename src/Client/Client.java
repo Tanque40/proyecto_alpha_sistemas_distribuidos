@@ -1,7 +1,6 @@
 package Client;
 
 import Client.Controller.ControllerClient;
-import Client.View.ViewClient;
 
 public class Client {
     public static void main(String[] args) {

@@ -6,14 +6,18 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JButton;
 
+import Server.Utils.ManageConnection;
 import Server.View.ViewServer;
 
-public class ControllerServer extends ViewServer {
-    boolean initialazed = false;
+public class ControllerServer extends ViewServer implements Runnable {
+    private boolean initialazed = false;
+    private final int TCP_SERVER_PORT = 49152;
 
     public ControllerServer(String title) {
         super(title);
@@ -30,7 +34,7 @@ public class ControllerServer extends ViewServer {
 
     public class BtnMoleListenner implements ActionListener {
         private int id;
-        private boolean moleUp = false;
+        private boolean moleUp = true;
         private ControllerServer controller;
         private JButton thisButton;
 
@@ -42,7 +46,6 @@ public class ControllerServer extends ViewServer {
         }
 
         public void actionPerformed(ActionEvent actionEvent) {
-            // TODO implements actions
             MulticastSocket socket = null;
             try {
                 InetAddress group = InetAddress.getByName("228.5.6.7"); // destination multicast group
@@ -74,6 +77,21 @@ public class ControllerServer extends ViewServer {
                 thisButton.setText("Mole Down");
             }
             moleUp = !moleUp;
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            ServerSocket tcpServerSocket = new ServerSocket(TCP_SERVER_PORT);
+            while (true) {
+                System.out.println("Waiting for messages...");
+                Socket managerSocket = tcpServerSocket.accept();
+                ManageConnection manageConnection = new ManageConnection(managerSocket);
+                manageConnection.start();
+            }
+        } catch (IOException e) {
+            System.out.println("Listen :" + e.getMessage());
         }
     }
 }

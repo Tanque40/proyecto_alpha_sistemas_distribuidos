@@ -29,7 +29,7 @@ public class ViewClient extends JFrame {
         jPanelViewServer.setLayout(new GridBagLayout());
         viewServerBorder = BorderFactory.createEmptyBorder(10, 15, 10, 15);
         jPanelViewServer.setBorder(viewServerBorder);
-        jPanelViewServer.setBackground(new Color(14, 140, 29));
+        jPanelViewServer.setBackground(new Color(14, 140, 250));
 
         constraints = new GridBagConstraints();
 
