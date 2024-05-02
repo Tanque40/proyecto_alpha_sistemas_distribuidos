@@ -11,6 +11,7 @@ import java.net.SocketException;
 import javax.swing.JButton;
 
 import Client.View.ViewClient;
+import Client.lib.TCP_Client;
 
 public class ControllerClient extends ViewClient implements Runnable {
     boolean initialazed = false;
@@ -42,7 +43,8 @@ public class ControllerClient extends ViewClient implements Runnable {
         }
 
         public void actionPerformed(ActionEvent actionEvent) {
-            // TODO implemnts actions
+            controller.lNotes.setText("Boton puchado " + id);
+            TCP_Client tcpClient = new TCP_Client(id);
         }
     }
 

@@ -6,6 +6,12 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
+/*
+ * @author: Bruno Vitte @Tanque40 in github
+ * @version: 1.0
+ * @brief: ManageConnection recives each player point
+ */
+
 public class ManageConnection extends Thread {
     private DataInputStream in;
     private DataOutputStream out;
