@@ -11,17 +11,19 @@ import java.net.SocketException;
 import javax.swing.JButton;
 
 import Client.View.ViewClient;
-import Client.lib.TCP_Client;
+import Client.lib.TCPClient;
+import lib.User;
 
 public class ControllerClient extends ViewClient implements Runnable {
-    boolean initialazed = false;
+    private boolean initialazed = false;
+    private User playerMe;
 
-    public ControllerClient(String title) {
-        super("Controller Client");
+    public ControllerClient(String title, String userName) {
+        super(title + " " + userName);
         this.lNotes.setText("Controller initialized");
         int cont = 1;
         for (JButton btMole : btMole) {
-            btMole.addActionListener(new BtnMoleListenner(this, btMole, cont));
+            btMole.addActionListener(new BtnMoleListener(this, btMole, cont));
             if (!initialazed)
                 btMole.setText("Mole Down");
             cont++;
@@ -29,13 +31,14 @@ public class ControllerClient extends ViewClient implements Runnable {
         initialazed = true;
     }
 
-    public class BtnMoleListenner implements ActionListener {
+    public class BtnMoleListener implements ActionListener {
         private int id;
         private boolean moleUp = true;
         private ControllerClient controller;
         private JButton thisButton;
+        TCPClient tcpClient;
 
-        public BtnMoleListenner(ControllerClient _cotroller, JButton _thisButton, int _id) {
+        public BtnMoleListener(ControllerClient _cotroller, JButton _thisButton, int _id) {
             super();
             id = _id;
             controller = _cotroller;
@@ -44,7 +47,7 @@ public class ControllerClient extends ViewClient implements Runnable {
 
         public void actionPerformed(ActionEvent actionEvent) {
             controller.lNotes.setText("Boton puchado " + id);
-            TCP_Client tcpClient = new TCP_Client(id);
+            tcpClient = new TCPClient(id);
         }
     }
 

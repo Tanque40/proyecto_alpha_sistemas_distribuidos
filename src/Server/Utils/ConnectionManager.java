@@ -6,20 +6,24 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
+import Server.lib.GameManager;
+
 /*
  * @author: Bruno Vitte @Tanque40 in github
  * @version: 1.0
  * @brief: ManageConnection recives each player point
  */
 
-public class ManageConnection extends Thread {
+public class ConnectionManager extends Thread {
     private DataInputStream in;
     private DataOutputStream out;
     private Socket connectionSocket;
+    private GameManager gameManager;
 
-    public ManageConnection(Socket connectionSocket) {
+    public ConnectionManager(Socket connectionSocket, GameManager gameManager) {
         try {
             this.connectionSocket = connectionSocket;
+            this.gameManager = gameManager;
             in = new DataInputStream(connectionSocket.getInputStream());
             out = new DataOutputStream(connectionSocket.getOutputStream());
         } catch (IOException error) {

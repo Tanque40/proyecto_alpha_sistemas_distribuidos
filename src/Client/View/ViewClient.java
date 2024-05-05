@@ -15,9 +15,9 @@ import java.awt.GridBagLayout;
 public class ViewClient extends JFrame {
     static final int NumberMoles = 9;
 
-    private JPanel jPanelViewServer;
-    Font viewServerFont = new Font("Arial", 1, 14);
-    Border viewServerBorder;
+    private JPanel jPanelViewClient;
+    Font viewClientFont = new Font("Arial", 1, 14);
+    Border viewClientBorder;
     GridBagConstraints constraints;
     protected JButton btMole[];
     protected JLabel lNotes;
@@ -25,11 +25,11 @@ public class ViewClient extends JFrame {
     public ViewClient(String title) {
         super(title);
 
-        jPanelViewServer = new JPanel();
-        jPanelViewServer.setLayout(new GridBagLayout());
-        viewServerBorder = BorderFactory.createEmptyBorder(10, 15, 10, 15);
-        jPanelViewServer.setBorder(viewServerBorder);
-        jPanelViewServer.setBackground(new Color(14, 140, 250));
+        jPanelViewClient = new JPanel();
+        jPanelViewClient.setLayout(new GridBagLayout());
+        viewClientBorder = BorderFactory.createEmptyBorder(10, 15, 10, 15);
+        jPanelViewClient.setBorder(viewClientBorder);
+        jPanelViewClient.setBackground(new Color(14, 140, 250));
 
         constraints = new GridBagConstraints();
 
@@ -38,7 +38,7 @@ public class ViewClient extends JFrame {
         for (int i = 0; i < Math.sqrt(NumberMoles); i++) {
             for (int j = 0; j < Math.sqrt(NumberMoles); j++) {
                 btMole[cont - 1] = new JButton("Topo " + cont);
-                btMole[cont - 1].setFont(viewServerFont);
+                btMole[cont - 1].setFont(viewClientFont);
 
                 constraints.gridx = j;
                 constraints.gridy = i;
@@ -49,18 +49,18 @@ public class ViewClient extends JFrame {
                 constraints.anchor = GridBagConstraints.CENTER;
                 constraints.fill = GridBagConstraints.NONE;
 
-                jPanelViewServer.add(btMole[cont - 1], constraints);
+                jPanelViewClient.add(btMole[cont - 1], constraints);
                 cont++;
             }
         }
 
         lNotes = new JLabel("Vista Cliente Iniciada");
-        lNotes.setFont(viewServerFont);
+        lNotes.setFont(viewClientFont);
         constraints.gridy = (int) Math.sqrt(NumberMoles) + 1;
         constraints.gridx = 0;
-        jPanelViewServer.add(lNotes, constraints);
+        jPanelViewClient.add(lNotes, constraints);
 
-        this.add(jPanelViewServer);
+        this.add(jPanelViewClient);
         this.setBounds(400, 100, 400, 400);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);

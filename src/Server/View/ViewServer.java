@@ -14,12 +14,12 @@ import java.awt.GridBagLayout;
 
 public class ViewServer extends JFrame {
 
-    static final int NumberMoles = 9;
+    private static final int NumberMoles = 9;
 
     private JPanel jPanelViewServer;
-    Font viewServerFont = new Font("Arial", 1, 14);
-    Border viewServerBorder;
-    GridBagConstraints constraints;
+    private Font viewServerFont = new Font("Arial", 1, 14);
+    private Border viewServerBorder;
+    private GridBagConstraints constraints;
     protected JButton btMole[];
     protected JLabel lNotes;
 

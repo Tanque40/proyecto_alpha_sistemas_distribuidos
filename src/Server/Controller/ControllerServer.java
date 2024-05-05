@@ -12,12 +12,14 @@ import java.net.SocketException;
 
 import javax.swing.JButton;
 
-import Server.Utils.ManageConnection;
+import Server.Utils.ConnectionManager;
 import Server.View.ViewServer;
+import Server.lib.GameManager;
 
 public class ControllerServer extends ViewServer implements Runnable {
     private boolean initialazed = false;
     private final int TCP_SERVER_PORT = 49152;
+    private GameManager gameManager;
 
     public ControllerServer(String title) {
         super(title);
@@ -30,6 +32,7 @@ public class ControllerServer extends ViewServer implements Runnable {
             cont++;
         }
         initialazed = true;
+        gameManager = new GameManager();
     }
 
     public class BtnMoleListenner implements ActionListener {
@@ -50,7 +53,6 @@ public class ControllerServer extends ViewServer implements Runnable {
             try {
                 InetAddress group = InetAddress.getByName("228.5.6.7"); // destination multicast group
                 socket = new MulticastSocket(49155);
-                socket.joinGroup(group);
                 socket.setTimeToLive(10);
                 System.out.println("Messages' TTL (Time-To-Live): " + socket.getTimeToLive());
                 String myMessage = "" + id;
@@ -58,7 +60,6 @@ public class ControllerServer extends ViewServer implements Runnable {
                 DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 49155);
                 socket.send(messageOut);
                 System.out.println("Mensaje enviado: " + id);
-                socket.leaveGroup(group);
             } catch (SocketException e) {
                 System.out.println("Socket: " + e.getMessage());
             } catch (IOException e) {
@@ -87,8 +88,8 @@ public class ControllerServer extends ViewServer implements Runnable {
             while (true) {
                 System.out.println("Waiting for messages...");
                 Socket managerSocket = tcpServerSocket.accept();
-                ManageConnection manageConnection = new ManageConnection(managerSocket);
-                manageConnection.start();
+                ConnectionManager connectionManager = new ConnectionManager(managerSocket, gameManager);
+                connectionManager.start();
             }
         } catch (IOException e) {
             System.out.println("Listen :" + e.getMessage());

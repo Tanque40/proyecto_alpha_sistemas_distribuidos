@@ -2,6 +2,8 @@ package Server.lib;
 
 import java.util.ArrayList;
 
+import lib.User;
+
 /*
  * @author: Bruno Vitte @Tanque40 in github
  * @version: 1.0
@@ -10,32 +12,31 @@ import java.util.ArrayList;
  */
 
 public class GameManager {
-    private ArrayList<Integer> points;
-    private int players;
+    private ArrayList<User> players;
     private int winnerPlayer;
 
     public GameManager() {
-        points = new ArrayList<Integer>();
-        players = 0;
+        players = new ArrayList<User>();
         winnerPlayer = 0;
     }
 
-    public void addPoint(int player) {
-        points.set(player - 1, points.get(player - 1) + 1);
+    public void addPoint(int playerId) {
+        for (User player : players) {
+            if (player.getId() == playerId)
+                player.setPoints(player.getPoints() + 1);
+        }
     }
 
-    public int addPlayer() {
-        points.add(0);
-        players++;
-        return players;
+    public void addPlayer(User player) {
+        players.add(player);
     }
 
     public boolean hasWinner() {
         boolean response = false;
 
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i) == 5) {
-                winnerPlayer = i + 1;
+        for (User player : players) {
+            if (player.getPoints() == 5) {
+                winnerPlayer = player.getId();
                 response = true;
             }
         }
