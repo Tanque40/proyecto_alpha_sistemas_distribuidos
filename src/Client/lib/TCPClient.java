@@ -15,10 +15,12 @@ import java.net.UnknownHostException;
 
 public class TCPClient {
     private Socket socketClient;
+    DataOutputStream out;
+    DataInputStream in;
     private final String HOST = "localhost";
     private final int PORT = 49152;
 
-    public TCPClient(int valueToSend) {
+    public TCPClient() {
         try {
             socketClient = new Socket(HOST, PORT);
 
@@ -39,7 +41,7 @@ public class TCPClient {
 
     public void sendPoint(int valueToSend) {
         try {
-            DataOutputStream out = new DataOutputStream(socketClient.getOutputStream());
+            out = new DataOutputStream(socketClient.getOutputStream());
             out.writeInt(valueToSend);
         } catch (IOException exception) {
             System.err.println("At SendPoint [IO]: " + exception.getMessage());
@@ -47,9 +49,6 @@ public class TCPClient {
     }
 
     public int registerUser(String userName) {
-        DataOutputStream out;
-        DataInputStream in;
-
         int returnedId = -1;
 
         try {
