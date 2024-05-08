@@ -1,9 +1,13 @@
 package lib;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 /*
  * @author: Bruno Vitte @Tanque40 in github
  * @version: 1.0
- * @brief: Create a user, store points
+ * @brief: Create a user, store points, read if has a stored user
  */
 
 public class User {
@@ -35,5 +39,27 @@ public class User {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public static User readUserFile(String givenUser) {
+        int id, points;
+        String name;
+        try {
+            File userFile = new File("user.me");
+            Scanner userFileReader = new Scanner(userFile);
+            id = userFileReader.nextInt();
+            name = userFileReader.nextLine();
+            points = userFileReader.nextInt();
+            userFileReader.close();
+            if (name.equals(givenUser)) {
+                return new User(id, name, points);
+            } else {
+                System.err.println("Given username and stored user are not the same");
+                return null;
+            }
+        } catch (FileNotFoundException fnfe) {
+            System.err.println("File not founded, null user returned");
+            return null;
+        }
     }
 }

@@ -4,6 +4,7 @@ bin-int/**
 **/.DS_Store
 Makefile
 imgui.ini
+*.code-workspace
 
 # Prerequisites
 *.d

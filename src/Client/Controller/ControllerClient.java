@@ -16,7 +16,8 @@ import lib.User;
 
 public class ControllerClient extends ViewClient implements Runnable {
     private boolean initialazed = false;
-    private User playerMe;
+    private User playerMe = null;
+    TCPClient tcpClient;
 
     public ControllerClient(String title, String userName) {
         super(title + " " + userName);
@@ -29,6 +30,17 @@ public class ControllerClient extends ViewClient implements Runnable {
             cont++;
         }
         initialazed = true;
+        tcpClient = new TCPClient();
+        int playerId;
+        if (!readUser(userName)) {
+            playerId = tcpClient.registerUser(userName);
+            playerMe = new User(playerId, userName, 0);
+        }
+    }
+
+    public boolean readUser(String userName) {
+        playerMe = User.readUserFile(userName);
+        return playerMe != null;
     }
 
     public class BtnMoleListener implements ActionListener {
@@ -36,7 +48,6 @@ public class ControllerClient extends ViewClient implements Runnable {
         private boolean moleUp = true;
         private ControllerClient controller;
         private JButton thisButton;
-        TCPClient tcpClient;
 
         public BtnMoleListener(ControllerClient _cotroller, JButton _thisButton, int _id) {
             super();
@@ -47,7 +58,7 @@ public class ControllerClient extends ViewClient implements Runnable {
 
         public void actionPerformed(ActionEvent actionEvent) {
             controller.lNotes.setText("Boton puchado " + id);
-            tcpClient = new TCPClient(id);
+
         }
     }
 

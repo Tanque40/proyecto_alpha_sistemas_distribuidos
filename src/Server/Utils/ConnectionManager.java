@@ -1,9 +1,9 @@
 package Server.Utils;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import Server.lib.GameManager;
@@ -15,8 +15,8 @@ import Server.lib.GameManager;
  */
 
 public class ConnectionManager extends Thread {
-    private DataInputStream in;
-    private DataOutputStream out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private Socket connectionSocket;
     private GameManager gameManager;
 
@@ -24,8 +24,8 @@ public class ConnectionManager extends Thread {
         try {
             this.connectionSocket = connectionSocket;
             this.gameManager = gameManager;
-            in = new DataInputStream(connectionSocket.getInputStream());
-            out = new DataOutputStream(connectionSocket.getOutputStream());
+            in = new ObjectInputStream(connectionSocket.getInputStream());
+            out = new ObjectOutputStream(connectionSocket.getOutputStream());
         } catch (IOException error) {
             System.out.println("Error on connection: " + error.getMessage());
         }

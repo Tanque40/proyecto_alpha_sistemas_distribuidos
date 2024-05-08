@@ -1,11 +1,14 @@
 package Client.lib;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import lib.ConnectionObject;
+import lib.ConnectionType;
 
 /*
  * @author: Bruno Vitte @Tanque40
@@ -15,8 +18,8 @@ import java.net.UnknownHostException;
 
 public class TCPClient {
     private Socket socketClient;
-    DataOutputStream out;
-    DataInputStream in;
+    ObjectOutputStream out;
+    ObjectInputStream in;
     private final String HOST = "localhost";
     private final int PORT = 49152;
 
@@ -41,8 +44,14 @@ public class TCPClient {
 
     public void sendPoint(int valueToSend) {
         try {
-            out = new DataOutputStream(socketClient.getOutputStream());
-            out.writeInt(valueToSend);
+            out = new ObjectOutputStream(socketClient.getOutputStream());
+            ConnectionObject connectionObject = new ConnectionObject(
+                    ConnectionType.SET_POINT,
+                    null,
+                    valueToSend,
+                    "",
+                    0);
+            out.writeObject(connectionObject);
         } catch (IOException exception) {
             System.err.println("At SendPoint [IO]: " + exception.getMessage());
         }
@@ -52,12 +61,20 @@ public class TCPClient {
         int returnedId = -1;
 
         try {
-            out = new DataOutputStream(socketClient.getOutputStream());
-            in = new DataInputStream(socketClient.getInputStream());
-            out.writeUTF(userName);
-            returnedId = in.readInt();
+            out = new ObjectOutputStream(socketClient.getOutputStream());
+            in = new ObjectInputStream(socketClient.getInputStream());
+            ConnectionObject connectionObject = new ConnectionObject(
+                    ConnectionType.SET_POINT,
+                    null,
+                    0,
+                    userName,
+                    0);
+            out.writeObject(connectionObject);
+            returnedId = ((ConnectionObject) in.readObject()).returnedId;
         } catch (IOException exception) {
             System.err.println("At registerUser [IO]: " + exception.getMessage());
+        } catch (ClassNotFoundException classNotFoundException) {
+            System.err.println("Error on recive class [Register User]: " + classNotFoundException.getMessage());
         }
 
         return returnedId;
