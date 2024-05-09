@@ -14,6 +14,11 @@ import lib.User;
 public class GameManager {
     private ArrayList<User> players;
     private int winnerPlayer;
+    private int countPlayers = 0;
+
+    public int getCountPlayers() {
+        return countPlayers;
+    }
 
     public ArrayList<User> getPlayers() {
         return players;
@@ -39,8 +44,10 @@ public class GameManager {
         }
     }
 
-    public void addPlayer(User player) {
+    public int addPlayer(User player) {
         players.add(player);
+        countPlayers++;
+        return countPlayers;
     }
 
     public boolean hasWinner() {

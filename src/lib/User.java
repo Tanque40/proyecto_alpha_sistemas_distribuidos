@@ -47,9 +47,14 @@ public class User {
         try {
             File userFile = new File("user.me");
             Scanner userFileReader = new Scanner(userFile);
-            id = userFileReader.nextInt();
-            name = userFileReader.nextLine();
-            points = userFileReader.nextInt();
+            if (userFileReader.hasNext()) {
+                id = userFileReader.nextInt();
+                name = userFileReader.nextLine();
+                points = userFileReader.nextInt();
+            } else {
+                userFileReader.close();
+                return null;
+            }
             userFileReader.close();
             if (name.equals(givenUser)) {
                 return new User(id, name, points);
@@ -59,6 +64,7 @@ public class User {
             }
         } catch (FileNotFoundException fnfe) {
             System.err.println("File not founded, null user returned");
+            System.out.println(System.getProperty("user.dir"));
             return null;
         }
     }

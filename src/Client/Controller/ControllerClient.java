@@ -16,7 +16,6 @@ import lib.User;
 public class ControllerClient extends ViewClient implements Runnable {
     private boolean initialazed = false;
     private User playerMe = null;
-    TCPClient tcpClient;
 
     public ControllerClient(String title, String userName) {
         super(title + " " + userName);
@@ -29,10 +28,10 @@ public class ControllerClient extends ViewClient implements Runnable {
             cont++;
         }
         initialazed = true;
-        tcpClient = new TCPClient();
         int playerId;
         if (!readUser(userName)) {
-            playerId = tcpClient.registerUser(userName);
+            System.out.println("Checando ando");
+            playerId = TCPClient.registerUser(userName);
             playerMe = new User(playerId, userName, 0);
         }
     }
@@ -44,7 +43,7 @@ public class ControllerClient extends ViewClient implements Runnable {
 
     public class BtnMoleListener implements ActionListener {
         private int id;
-        private boolean moleUp = true;
+        private boolean moleUp = false;
         private ControllerClient controller;
         private JButton thisButton;
 
@@ -57,7 +56,20 @@ public class ControllerClient extends ViewClient implements Runnable {
 
         public void actionPerformed(ActionEvent actionEvent) {
             controller.lNotes.setText("Boton puchado " + id);
+            if (moleUp) {
+                thisButton.setText("Mole Up");
+            } else {
+                thisButton.setText("Mole Down");
+            }
+            moleUp = !moleUp;
+        }
 
+        public boolean isMoleUp() {
+            return moleUp;
+        }
+
+        public void setMoleUp(boolean moleUp) {
+            this.moleUp = moleUp;
         }
     }
 
@@ -72,7 +84,7 @@ public class ControllerClient extends ViewClient implements Runnable {
                 socket.receive(messageIn);
                 String message = new String(messageIn.getData()).trim();
                 int value = Integer.parseInt(message);
-                this.btMole[value - 1].setText("Mole Up");
+                this.btMole[value - 1].doClick();
                 this.lNotes.setText("Text recibido" + message);
             } catch (SocketException e) {
                 System.out.println("Socket: " + e.getMessage());
