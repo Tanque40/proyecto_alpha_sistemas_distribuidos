@@ -15,6 +15,18 @@ public class GameManager {
     private ArrayList<User> players;
     private int winnerPlayer;
 
+    public ArrayList<User> getPlayers() {
+        return players;
+    }
+
+    public int getWinnerPlayer() {
+        return winnerPlayer;
+    }
+
+    public void setWinnerPlayer(int winnerPlayer) {
+        this.winnerPlayer = winnerPlayer;
+    }
+
     public GameManager() {
         players = new ArrayList<User>();
         winnerPlayer = 0;
@@ -36,7 +48,7 @@ public class GameManager {
 
         for (User player : players) {
             if (player.getPoints() == 5) {
-                winnerPlayer = player.getId();
+                this.setWinnerPlayer(player.getId());
                 response = true;
             }
         }

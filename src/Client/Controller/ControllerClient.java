@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
 
@@ -67,14 +66,12 @@ public class ControllerClient extends ViewClient implements Runnable {
         MulticastSocket socket = null;
         while (true) {
             try {
-                InetAddress group = InetAddress.getByName("228.5.6.7");
                 socket = new MulticastSocket(49155);
-                socket.joinGroup(group);
                 byte[] buffer = new byte[1000];
                 DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
                 socket.receive(messageIn);
                 String message = new String(messageIn.getData()).trim();
-                int value = new Integer(message);
+                int value = Integer.parseInt(message);
                 this.btMole[value - 1].setText("Mole Up");
                 this.lNotes.setText("Text recibido" + message);
             } catch (SocketException e) {

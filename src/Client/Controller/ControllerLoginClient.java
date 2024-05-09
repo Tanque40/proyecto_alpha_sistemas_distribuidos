@@ -22,7 +22,8 @@ public class ControllerLoginClient extends ViewLogInClient {
         public void actionPerformed(ActionEvent actionEvent) {
             String userName = controller.tfUserName.getText();
             controller.setVisible(false);
-            ControllerClient cc = new ControllerClient("Hora de Jugar:", userName);
+            Thread thread = new Thread(new ControllerClient("Hora de Jugar:", userName));
+            thread.start();
         }
     }
 }
