@@ -35,6 +35,7 @@ public class GameManager {
     public void addPoint(int playerId) {
         for (User player : players) {
             if (player.getId() == playerId)
+
                 player.setPoints(player.getPoints() + 1);
         }
     }
