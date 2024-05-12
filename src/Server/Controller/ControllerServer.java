@@ -83,8 +83,9 @@ public class ControllerServer extends ViewServer implements Runnable {
 
     @Override
     public void run() {
+        ServerSocket tcpServerSocket;
         try {
-            ServerSocket tcpServerSocket = new ServerSocket(TCP_SERVER_PORT);
+            tcpServerSocket = new ServerSocket(TCP_SERVER_PORT);
             while (true) {
                 System.out.println("Waiting for messages...");
                 Socket managerSocket = tcpServerSocket.accept();
